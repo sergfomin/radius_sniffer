@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<radius_sniffer>
+    <!-- Source ID -->
+    <source_id>999</source_id>
+
+    <!-- Delay of response (sec) -->
+    <delay>2</delay>
+
+    <!-- The name of the network device to sniff --> 
+    <network_device>lo</network_device>
+
+    <!-- Filter to sniff in the format tcpdump --> 
+    <filter>udp portrange 1812-1814 or portrange 1645-1646</filter>
+
+    <!-- Host name to connect to Thrift server -->
+    <thrift_hostname>localhost</thrift_hostname>
+
+    <!-- File name to log -->
+    <log_filename>radius_sniffer.log</log_filename>
+
+</radius_sniffer>
