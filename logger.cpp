@@ -63,7 +63,7 @@ void Logger::Trace(const std::string& message, const Radius::RadiusAttrPacket& p
         auto t = time(nullptr);
 
         m_ofstream << put_time(localtime(&t), "%d/%m/%y %X") << " " << message.c_str() << endl;
-        m_ofstream << "------------------------------------------------------------------------------" << endl;
+        m_ofstream << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
         m_ofstream << "ID: " << static_cast<uint>(packet.m_id) << endl;
         m_ofstream << "Code: " << static_cast<uint>(packet.m_code) << endl;
         m_ofstream << "Length: " << packet.m_length << endl;
@@ -73,7 +73,7 @@ void Logger::Trace(const std::string& message, const Radius::RadiusAttrPacket& p
         {
             m_ofstream << "    AttrCode: " << static_cast<uint>(attr.first) << " AttrValue: " << attr.second << endl;
         }
-        m_ofstream << "------------------------------------------------------------------------------" << endl;
+        m_ofstream << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl << endl;
     }
 }
 

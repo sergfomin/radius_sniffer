@@ -15,7 +15,7 @@ Process::~Process()
         if (r.m_obsolete)
             continue;
 
-        log.Trace("Response is not received in %d ms for the request.", (Delay + 1000));
+        log.Trace("Response is not received in %d ms for the request.", Delay);
         log.Trace("REQUEST:", r);
     }
     m_requests.clear();
@@ -39,13 +39,17 @@ void Process::ProcessPacket(RadiusAttrPacket&& packet)
     // Is it request
     if (packet.m_code == RadiusCodeReq)
     {
-        // Remove expired requests from the top of the queue
-        while(m_requests.front().m_obsolete)
+        if(!m_requests.empty())
         {
-            log.Trace("ProcessPacket: Remove request packet from the queue:", packet);
-            m_requests.pop_front();
+            // Remove expired requests from the top of the queue
+            while(m_requests.front().m_obsolete)
+            {
+                if(m_requests.empty())
+                    break;
+                log.Trace("ProcessPacket: Remove request packet from the queue:", m_requests.front());
+                m_requests.pop_front();
+            }
         }
-
         m_requests.push_back(std::move(packet));
 
         for(auto& r : m_requests)
@@ -58,7 +62,7 @@ void Process::ProcessPacket(RadiusAttrPacket&& packet)
             if ( IsRequestExpired(r, current_time_ms) )
             {
                 r.m_obsolete = true;
-                log.Trace("ProcessPacket: Response is not received in %d ms for the request.", (Delay+1000));
+                log.Trace("ProcessPacket: Response is not received in %d ms for the request.", Delay);
                 log.Trace("ProcessPacket: REQUEST marked as obsolete.", r);
             }
             else
@@ -80,6 +84,10 @@ void Process::ProcessPacket(RadiusAttrPacket&& packet)
                 // Send Thrift request
                 SendRequest(*found_req, packet);
                 m_total_send_req++;
+
+                log.Trace("ProcessPacket: Send thrift request with attributes of request/response:");
+                log.Trace("REQUEST:", *found_req);
+                log.Trace("RESPONSE:", packet);
             }
             else
             {

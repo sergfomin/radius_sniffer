@@ -28,11 +28,11 @@ class ThriftServiceHandler : virtual public ThriftServiceIf {
     // Your implementation goes here
     printf("Received request\n");
     std::ofstream f;
-    f.open("radius_attr.log", std::ios_base::app);
+    f.open("thrift_server.log", std::ios_base::app);
     if(f.is_open())
     {
-        f << "----------------------------------------------------------------------" << std::endl;
-        f << "ID: " << req.sourceId << std::endl;
+        f << "-----------------------------------------------------------------------" << std::endl;
+        f << "Source ID: " << req.sourceId << std::endl;
         f << "Timestamp(ms): " << req.captureTimestamp << std::endl;
         f << std::endl << "Radius Attributes Request:" << std::endl;
         for(const auto& attr : req.avpRequestList)
@@ -44,7 +44,6 @@ class ThriftServiceHandler : virtual public ThriftServiceIf {
         {
             f << "AttrCode: " << static_cast<uint>(attr.type) << " AttrValue: " << attr.value << std::endl;
         }
-        f << std::endl;
         f.close();
     }
   }
